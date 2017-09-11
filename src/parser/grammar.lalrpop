@@ -1,0 +1,26 @@
+use std::str::FromStr;
+use parser::utils::{FromIter};
+
+grammar;
+
+integer: i64 = { <s:Int> => i64::from_iter(s.chars().filter(|c| *c != '_')).unwrap() };
+base = Int;
+base_specifier = { "B", "O", "X", "UB", "UO", "UX", "SB", "SO", "SX", "D" };
+based_integer = EInt;
+
+pub identifier = {
+    Id,
+    //escaped identifiers
+    "\\" <i:EId> "\\" => i
+};
+
+match {
+    r"[[:alpha:][\x80-\xA5]]+" => Id, //extended ASCII identifiers
+    r"\d(_?\d)*" => Int,
+    "\\",
+} else {
+    r"[[:alnum:]](_?[[:alnum:]])*" => EInt,
+} else {
+    r"[^\\]+" => EId,
+    _
+}

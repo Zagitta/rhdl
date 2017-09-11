@@ -1,0 +1,16 @@
+[package]
+name = "rhdl"
+version = "0.1.0"
+authors = ["Simon Rasmussen <zetlon@gmail.com>"]
+
+[build-dependencies]
+lalrpop = "0.13.1"
+
+[dependencies]
+lalrpop-util = "0.13.1"
+regex = "0.2.1"
+itertools = "0.6.2"
+
+
+[features]
+bench = []
