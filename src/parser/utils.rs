@@ -1,7 +1,4 @@
 use std::iter::Iterator;
-use itertools::Itertools;
-use itertools::FoldWhile::{Continue, Done};
-use std::str::FromStr;
 
 pub trait FromIter<T, E> where Self: Sized {
     fn from_iter<I: Iterator<Item=T>>(iter: I) -> Result<Self, E>;
@@ -182,22 +179,23 @@ mod tests {
 #[cfg(feature = "bench")]
 mod bench {
     extern crate test;
-    use super::*;
     use self::test::Bencher;
+    use super::*;
+    use std::str::FromStr;
 
-    const DATA: &'static str = "112321237451111111116123";
+    const DATA: &'static str = "11232123745_1111111116123";
 
     #[bench]
-    fn bench_char_impl(b: &mut Bencher) {
+    fn bench_impl_char(b: &mut Bencher) {
         b.iter(|| {
-            i64::from_iter(DATA.chars())
+            i64::from_iter(DATA.chars().filter(|c| *c != '_'))
         })
     }
 
     #[bench]
-    fn bench_u8_impl(b: &mut Bencher) {
-        b.iter(|| {
-            i64::from_iter(DATA.bytes())
+    fn bench_impl_u8(b: &mut Bencher) {
+        b.iter( || {
+            i64::from_iter(DATA.bytes().filter(|b| *b != b'_'))
         })
     }
 
@@ -220,14 +218,6 @@ mod bench {
                 }
             }
             Some(a)
-        });
-    }
-
-
-    #[bench]
-    fn bench_map(b: &mut Bencher) {
-        b.iter(|| {
-            DATA.chars().filter(|c| *c != '_').map(|c| c.to_digit(10)).fold_options(0i64, |acc, d| acc * 10 + d as i64)
         });
     }
 
