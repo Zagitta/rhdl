@@ -11,7 +11,7 @@ based_integer = EInt;
 pub identifier = {
     Id,
     //escaped identifiers
-    "\\" <i:EId> "\\" => i
+    r"\\" <i:EId> r"\\" => i
 };
 
 match {
@@ -21,6 +21,6 @@ match {
 } else {
     r"[[:alnum:]](_?[[:alnum:]])*" => EInt,
 } else {
-    r"[^\\]+" => EId,
+    r"\w+" => EId,
     _
 }
