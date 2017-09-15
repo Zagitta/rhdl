@@ -15,7 +15,7 @@ pub identifier = {
 };
 
 match {
-    r"[[:alpha:][\x80-\xA5]]+" => Id, //extended ASCII identifiers
+    r"[[:alpha:][\x80-\xA5]][[:alpha:][\x80-\xA5]_]+" => Id, //extended ASCII identifiers
     r"\d(_?\d)*" => Int,
     "\\",
 } else {
